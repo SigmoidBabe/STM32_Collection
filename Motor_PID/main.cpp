@@ -57,11 +57,14 @@ int main() {
         DepanKananVelocity = ((double)DepanKananPulses - (double)DepanKananPrevPulses) / 0.02;
         DepanKananPrevPulses = DepanKananPulses;
 
-        //----------//
-        //drive motor forward with 0.9 pww
-        DepanKanan.speed(0.9);
+        //assign velocity value to PID input
+        DepanKananPID.setProcessValue(fabs(DepanKananVelocity));
 
-        //print velocity of motor in pulse per second
+        //----------//
+        //set motor's pwm with PID output
+        DepanKanan.speed(DepanKananPID.compute());
+
+        
         pc.printf("\n %f " ,DepanKananVelocity );
     
         
