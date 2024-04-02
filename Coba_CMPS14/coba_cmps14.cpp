@@ -13,6 +13,7 @@ Serial pc(USBTX, USBRX);
 
 int main()
 {
+    //bearing register in CMPS14 is 0x02(according to the datasheet)
     BEARING_Register = 0x02;
     pc.baud(9600);
     while(1)
@@ -30,10 +31,12 @@ int main()
         else
         {
             CMPS.stop();
+            //read bearing value 
             CMPS.read(i2c_address <<1, bits, 2);
             _byteHigh = bits[0];
             _byteLow = bits[1];
-            bearing = ((_byteHigh<<=8) + _byteLow) / 10;
+            //combine 2bytes into single 16-bit integer
+            bearing = (_byteHigh<<8) | _byteLow;
             pc.printf("Bearing : %d\n", bearing);
         }
     }
